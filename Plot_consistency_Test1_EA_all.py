@@ -31,8 +31,18 @@ wb = openpyxl.load_workbook(caminho_arquivo) # ler dados de abas individuais do 
 dados_coluna_C_array = [] # matriz para guardar os dados da coluna C de todas as sheet
 dados_coluna_I_array = [] # matriz para guardar os dados da coluna I de todas as sheet
 
+nomes_abas = []
+
 for i in wb.sheetnames: # para i dentro da lista wb com os nomes de todas as abas
     nome_aba = wb[i] # obtém o nome da aba na posição i na lista wb, que contém os nomes de todas as abas
+    nome_aba_split = nome_aba.title.split("_") # nome_aba é o nome completo da aba. nome_aba.title converte o nome da aba para o formato de título. split("_ ") divide o nome da aba em duas partes usando o caractere "_ "
+    if len(nome_aba_split) > 2: # se o nome da aba contiver mais de duas partes 
+        nome_aba_split.insert(2, "wt%") # insere wt% entre a segunda e a terceira partes do nome da aba 
+        nome_aba_final = "_".join(nome_aba_split) # junta as partes do nome da aba de volta com "_"
+        print('nome_aba_final', nome_aba_final)
+        nomes_abas.append(nome_aba_final) # adiciona o nome modificado _a lista de nomes das abas 
+    else:
+        nomes_abas.append(nome_aba.title) # nome da aba não tiver mais de duas partes, adiciona o nome completo da aba à lista nomes_abas (usada na legenda)
 
     dados_coluna_C = [] # abre uma lista para os dados da coluna C da sheet 
     dados_coluna_I = [] # abre uma lista para os dados da coluna I da sheet
@@ -59,12 +69,11 @@ for i in range(len(dados_coluna_C_array)):
     y = dados_coluna_I_array[i]
     print('x', x)
     print('y', y)
-    for j in range(len(symbols)):
-        symbol=symbols[i]
-        color=colors[i]
-        plt.plot(x, y, marker=symbol, markersize=opt['markersize'], markeredgewidth=opt['markeredgewidth'], fillstyle=opt['fillstyle'], color=color, linestyle='none')
+    symbol=symbols[i]
+    color=colors[i]
+    plt.plot(x, y, marker=symbol, markersize=opt['markersize'], markeredgewidth=opt['markeredgewidth'], fillstyle=opt['fillstyle'], color=color, linestyle='none')
 
-
+plt.legend(nomes_abas, loc='upper left', fontsize=4, markerscale=0.5)
 plt.xlabel('Temperature [K]',fontproperties=font)
 plt.ylabel('$\Delta$T/(T$_0$T)',fontproperties=font)
 #plt.legend(loc="upper left")
