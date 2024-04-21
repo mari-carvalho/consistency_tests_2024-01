@@ -1,4 +1,4 @@
-# Plot_consistency - DMEA
+# Plot_consistency - TMA 
 import matplotlib.pyplot as plt
 import matplotlib
 from matplotlib.font_manager import FontProperties
@@ -24,12 +24,13 @@ plt.rcParams['axes.facecolor'] = '0.95' # cor de fundo dos eixos como uma tonali
 #plt.rcParams['figure.figsize'] = (4,4) # tamanho da figura padrão em polegadas 
 
 
-caminho_arquivo = 'DMEA.xlsx' # caminho do arquivo de DMA 
+caminho_arquivo = 'EA.xlsx' # caminho do arquivo  
 wb = openpyxl.load_workbook(caminho_arquivo) # ler dados de abas individuais do arquivo Excel sem abrir e fechar repetidamente, mantém aberto. Mais eficiente se você precisa ler dados de várias abas do arquivo. Lista com os nomes de todas as abas do arquivo Excel.
 # load_workbook é a função usada para carregar o arquvio Excel
 
-dados_coluna_D_array = [] # matriz para guardar os dados da coluna C de todas as sheet
-dados_coluna_K_array = [] # matriz para guardar os dados da coluna I de todas as sheet
+dados_coluna_O_array = [] # matriz para guardar os dados da coluna O de todas as sheet
+dados_coluna_P_array = [] # matriz para guardar os dados da coluna P de todas as sheet
+dados_coluna_Q_array = [] # matriz para guardar os dados da coluna Q de todas as sheet
 
 nomes_abas = []
 
@@ -44,38 +45,49 @@ for i in wb.sheetnames: # para i dentro da lista wb com os nomes de todas as aba
     else:
         nomes_abas.append(nome_aba.title) # nome da aba não tiver mais de duas partes, adiciona o nome completo da aba à lista nomes_abas (usada na legenda)
 
-    dados_coluna_D = [] # abre uma lista para os dados da coluna C da sheet 
-    dados_coluna_K = [] # abre uma lista para os dados da coluna I da sheet
+    dados_coluna_O = [] # abre uma lista para os dados da coluna O da sheet 
+    dados_coluna_P = [] # abre uma lista para os dados da coluna P da sheet
+    dados_coluna_Q = [] # abre uma lista para os dados da coluna Q da sheet
 
     for j in nome_aba.iter_rows(min_row=2, values_only=True): # iter_rows: permite iterar sobre as linhas dessa aba # min_row=2: especifica a primeira linha a ser considerada, nesse caso, começa na segunda linha, pois a primeira linha geralmente contém os cabeçalhos das colunas # values_only=True: indica que queremos obter apenas os valores das células, sem incluir informações adicionais como formatação, fórmulas ou estilos. 
-        dados_coluna_D.append(j[3])
-        dados_coluna_K.append(j[10])
+        dados_coluna_O.append(j[14])
+        dados_coluna_P.append(j[15])
+        dados_coluna_Q.append(j[16])
 
-    dados_coluna_D_array.append(dados_coluna_D)
-    dados_coluna_K_array.append(dados_coluna_K)
+    dados_coluna_O_array.append(dados_coluna_O)
+    dados_coluna_P_array.append(dados_coluna_P)
+    dados_coluna_Q_array.append(dados_coluna_Q)
 
-print('dados_C', dados_coluna_D_array)
-print('dados_I', dados_coluna_K_array)
+print('dados_O', dados_coluna_O_array)
+print('dados_P', dados_coluna_P_array)
+print('dados_Q', dados_coluna_Q_array)
 
 # Plotagem dos dados:
 
-symbols = ['o', 's', '^', 'D', 'v', '>', '<', 'P', 'X', 'H']  # Exemplos de símbolos
+symbols = ['o', 's', '^', 'D', 'v', '>', '<', 'P', 'X', 'H', '*']  # Exemplos de símbolos
 
 # Vetor de cores
-colors = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf']  # Exemplos de cores
+colors = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf', 'pink']  # Exemplos de cores
 
-for i in range(len(dados_coluna_D_array)):
-    x = dados_coluna_D_array[i]
-    y = dados_coluna_K_array[i]
+lines = []
+
+for i in range(len(dados_coluna_O_array)):
+    y = dados_coluna_O_array[i]
+    x = dados_coluna_P_array[i]
+    x2 = dados_coluna_Q_array[i]
     print('x', x)
     print('y', y)
+    print('x2', x2)
     symbol=symbols[i]
     color=colors[i]
-    plt.plot(x, y, marker=symbol, markersize=opt['markersize'], markeredgewidth=opt['markeredgewidth'], fillstyle=opt['fillstyle'], color=color, linestyle='none')
+    line1, = plt.plot(x, y, marker=symbol, markersize=opt['markersize'], markeredgewidth=opt['markeredgewidth'], fillstyle=opt['fillstyle'], color=color, linestyle='none', label=nomes_abas[i]) # lines armazenam as linhas geradas pelos plots
+    line2, = plt.plot(x2, y, color='black', linestyle='-', linewidth=1)
 
-plt.legend(nomes_abas, loc='upper left', fontsize=4, markerscale=0.5)
-plt.xlabel('Temperature [K]',fontproperties=font)
-plt.ylabel('$\Delta$T/(T$_0$T)',fontproperties=font)
+    lines.append(line1)
+
+plt.legend(handles=lines, loc='upper right', fontsize=4, markerscale=0.5) # cria a legenda usando as linhas armazenadas na lista
+plt.xlabel('Pressure [bar]',fontproperties=font)
+plt.ylabel('1/T',fontproperties=font)
 #plt.legend(loc="upper left")
 
 nome_arquivo_python = os.path.basename(__file__) # obter o nome do arquivo python atual
