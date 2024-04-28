@@ -85,9 +85,11 @@ for i in range(len(dados_coluna_O_array)):
 
     lines.append(line1)
 
+plt.semilogy()
+plt.ticklabel_format(axis='x', style='sci', scilimits=(0,0)) # eixo x em notação científica 
 plt.legend(handles=lines, loc='upper right', fontsize=4, markerscale=0.5) # cria a legenda usando as linhas armazenadas na lista
-plt.xlabel('Pressure [bar]',fontproperties=font)
-plt.ylabel('1/T',fontproperties=font)
+plt.xlabel('1/T [K$^{-1}$]',fontproperties=font)
+plt.ylabel('ln P [Mpa]',fontproperties=font)
 #plt.legend(loc="upper left")
 
 nome_arquivo_python = os.path.basename(__file__) # obter o nome do arquivo python atual

@@ -74,8 +74,8 @@ for i in range(len(dados_coluna_D_array)):
     plt.plot(x, y, marker=symbol, markersize=opt['markersize'], markeredgewidth=opt['markeredgewidth'], fillstyle=opt['fillstyle'], color=color, linestyle='none')
 
 plt.legend(nomes_abas, loc='upper left', fontsize=4, markerscale=0.5)
-plt.xlabel('Temperature [K]',fontproperties=font)
-plt.ylabel('$\Delta$T/(T$_0$T)',fontproperties=font)
+plt.xlabel('T [K]',fontproperties=font)
+plt.ylabel('$\Delta$T/T$_0$T [K$^{-1}$]',fontproperties=font)
 #plt.legend(loc="upper left")
 
 nome_arquivo_python = os.path.basename(__file__) # obter o nome do arquivo python atual

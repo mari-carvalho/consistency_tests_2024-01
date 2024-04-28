@@ -2,6 +2,7 @@
 import matplotlib.pyplot as plt
 import matplotlib
 from matplotlib.font_manager import FontProperties
+from matplotlib.ticker import ScalarFormatter
 import pandas as pd
 import numpy as np
 import openpyxl
@@ -53,11 +54,17 @@ for i in wb.sheetnames: # para i dentro da lista wb com os nomes de todas as aba
         dados_coluna_O.append(j[14])
         dados_coluna_P.append(j[15])
         dados_coluna_Q.append(j[16])
-
+    
+    print('dados_O', dados_coluna_O)
+    for k in range(len(dados_coluna_O)):
+        if dados_coluna_O[k] is not None:
+            dados_coluna_O[k] = dados_coluna_O[k] * 10**2
+    print('dados_O', dados_coluna_O)
     dados_coluna_O_array.append(dados_coluna_O)
     dados_coluna_P_array.append(dados_coluna_P)
     dados_coluna_Q_array.append(dados_coluna_Q)
 
+    
 print('dados_O', dados_coluna_O_array)
 print('dados_P', dados_coluna_P_array)
 print('dados_Q', dados_coluna_Q_array)
@@ -85,9 +92,12 @@ for i in range(len(dados_coluna_O_array)):
 
     lines.append(line1)
 
+plt.gca().set_yscale('log')
+plt.gca().yaxis.set_major_formatter(ScalarFormatter(useOffset=True))
+plt.ticklabel_format(axis='x', style='sci', scilimits=(0,0)) # eixo x em notação científica 
 plt.legend(handles=lines, loc='upper right', fontsize=4, markerscale=0.5) # cria a legenda usando as linhas armazenadas na lista
-plt.xlabel('Pressure [bar]',fontproperties=font)
-plt.ylabel('1/T',fontproperties=font)
+plt.xlabel('1/T [K$^{-1}$]',fontproperties=font)
+plt.ylabel('ln P [Mpa]',fontproperties=font)
 #plt.legend(loc="upper left")
 
 nome_arquivo_python = os.path.basename(__file__) # obter o nome do arquivo python atual
