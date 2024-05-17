@@ -77,7 +77,7 @@ plt.legend(nomes_abas, loc='upper left', fontsize=4, markerscale=0.5)
 plt.xlabel('T [K]',fontproperties=font)
 plt.ylabel('$\Delta$T/T$_0$T [K$^{-1}$]',fontproperties=font)
 #plt.legend(loc="upper left")
-
+# teste
 nome_arquivo_python = os.path.basename(__file__) # obter o nome do arquivo python atual
 nome_arquivo_sem_extensao = os.path.splitext(nome_arquivo_python)[0] # obter o nome do arquivo sem extensão # [0] vai acessar o primeiro elemento da tupla retornado por path.splitext
 
